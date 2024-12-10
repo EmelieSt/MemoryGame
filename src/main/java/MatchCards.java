@@ -19,7 +19,7 @@ import java.util.ArrayList;
             }
         }
 
-        String[] cardList = { //track cardNames
+        String[] cardList = {
                 "darkness",
                 "double",
                 "fairy",
@@ -37,13 +37,13 @@ import java.util.ArrayList;
         int cardWidth = 90;
         int cardHeight = 128;
 
-        ArrayList<Card> cardSet; //create a deck of cards with cardNames and cardImageIcons
+        ArrayList<Card> cardSet;
         ImageIcon cardBackImageIcon;
 
         int boardWidth = columns * cardWidth; //5*128 = 640px
         int boardHeight = rows * cardHeight; //4*90 = 360px
 
-        JFrame frame = new JFrame("Pokemon Match Cards");
+        JFrame frame = new JFrame("Pokemon Match Kort");
         JLabel textLabel = new JLabel();
         JPanel textPanel = new JPanel();
         JPanel boardPanel = new JPanel();
@@ -68,16 +68,15 @@ import java.util.ArrayList;
             frame.setResizable(false);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-            //error text
+
             textLabel.setFont(new Font("Arial", Font.PLAIN, 20));
             textLabel.setHorizontalAlignment(JLabel.CENTER);
-            textLabel.setText("Errors: " + Integer.toString(errorCount));
+            textLabel.setText("Antal fel: " + Integer.toString(errorCount));
 
             textPanel.setPreferredSize(new Dimension(boardWidth, 30));
             textPanel.add(textLabel);
             frame.add(textPanel, BorderLayout.NORTH);
 
-            //card game board
             board = new ArrayList<JButton>();
             boardPanel.setLayout(new GridLayout(rows, columns));
             for (int i = 0; i < cardSet.size(); i++) {
@@ -104,7 +103,7 @@ import java.util.ArrayList;
 
                             if (card1Selected.getIcon() != card2Selected.getIcon()) {
                                 errorCount += 1;
-                                textLabel.setText("Errors: " + Integer.toString(errorCount));
+                                textLabel.setText("Antal fel: " + Integer.toString(errorCount));
                                 hideCardTimer.start();
                             }
                             else {
@@ -119,9 +118,8 @@ import java.util.ArrayList;
             }
             frame.add(boardPanel);
 
-            //restart game button
             restartButton.setFont(new Font("Arial", Font.PLAIN, 16));
-            restartButton.setText("Restart Game");
+            restartButton.setText("Börja om spelet");
             restartButton.setPreferredSize(new Dimension(boardWidth, 30));
             restartButton.setFocusable(false);
             restartButton.setEnabled(false);
@@ -136,13 +134,12 @@ import java.util.ArrayList;
                 card2Selected = null;
                 shuffleCards();
 
-                //re assign buttons with new cards
                 for (int i = 0; i < board.size(); i++) {
                     board.get(i).setIcon(cardSet.get(i).cardImageIcon);
                 }
 
                 errorCount = 0;
-                textLabel.setText("Errors: " + Integer.toString(errorCount));
+                textLabel.setText("Antal fel: " + Integer.toString(errorCount));
                 hideCardTimer.start();
             });
             restartGamePanel.add(restartButton);
@@ -151,7 +148,6 @@ import java.util.ArrayList;
             frame.pack();
             frame.setVisible(true);
 
-            //start game
             hideCardTimer = new Timer(1500, e -> hideCards());
             hideCardTimer.setRepeats(false);
             hideCardTimer.start();
@@ -161,26 +157,23 @@ import java.util.ArrayList;
         void setupCards() {
             cardSet = new ArrayList<Card>();
             for (String cardName : cardList) {
-                //load each card image
                 Image cardImg = new ImageIcon(getClass().getResource("/img/" + cardName + ".jpg")).getImage();
                 ImageIcon cardImageIcon = new ImageIcon(cardImg.getScaledInstance(cardWidth, cardHeight, java.awt.Image.SCALE_SMOOTH));
 
-                //create card object and add to cardSet
                 Card card = new Card(cardName, cardImageIcon);
                 cardSet.add(card);
             }
             cardSet.addAll(cardSet);
 
-            //load the back card image
             Image cardBackImg = new ImageIcon(getClass().getResource("/img/back.jpg")).getImage();
             cardBackImageIcon = new ImageIcon(cardBackImg.getScaledInstance(cardWidth, cardHeight, java.awt.Image.SCALE_SMOOTH));
         }
 
         void shuffleCards() {
             System.out.println(cardSet);
-            //shuffle
+
             for (int i = 0; i < cardSet.size(); i++) {
-                int j = (int) (Math.random() * cardSet.size()); //get random index
+                int j = (int) (Math.random() * cardSet.size());
                 //swap
                 Card temp = cardSet.get(i);
                 cardSet.set(i, cardSet.get(j));
@@ -190,13 +183,13 @@ import java.util.ArrayList;
         }
 
         void hideCards() {
-            if (gameReady && card1Selected != null && card2Selected != null) { //only flip 2 cards
+            if (gameReady && card1Selected != null && card2Selected != null) {
                 card1Selected.setIcon(cardBackImageIcon);
                 card1Selected = null;
                 card2Selected.setIcon(cardBackImageIcon);
                 card2Selected = null;
             }
-            else { //flip all cards face down
+            else {
                 for (int i = 0; i < board.size(); i++) {
                     board.get(i).setIcon(cardBackImageIcon);
                 }
